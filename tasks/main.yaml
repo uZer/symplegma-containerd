@@ -1,0 +1,33 @@
+---
+- name: Containerd | Ensure containerd installation directory exists
+  file: path={{ containerd_release_dir }} state=directory
+
+- name: Containerd | Download binaries
+  unarchive:
+    src: "{{ containerd_release_url }}"
+    dest: "{{ containerd_release_dir}}"
+    remote_src: yes
+
+- name: Containerd | Drop systemd unit
+  template:
+    src: containerd.service.j2
+    dest: /etc/systemd/system/containerd.service
+
+- name: Containerd | Enable Containerd unit
+  systemd:
+    name: containerd.service
+    daemon_reload: yes
+    state: started
+    enabled: yes
+
+- name: Containerd | List containerd binaries
+  find:
+    paths: "{{ containerd_release_dir }}/bin"
+  register: containerd_binaries
+
+- name: Containerd | Symlink containerd binaries
+  file:
+    src: "{{ item.path }}"
+    dest: "{{ bin_dir }}/{{ item.path | basename }}"
+    state: link
+  with_items: "{{ containerd_binaries.files }}"
