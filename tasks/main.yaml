@@ -1,6 +1,9 @@
 ---
-- name: Containerd | Ensure containerd installation directory exists
-  file: path={{ containerd_release_dir }} state=directory
+- name: Containerd | Ensure containerd required directory exist
+  file: path={{ item }} state=directory
+  with_items:
+    - "{{ containerd_release_dir }}"
+    - "{{ containerd_config_dir }}"
 
 - name: Containerd | Download binaries
   unarchive:
@@ -12,6 +15,13 @@
   template:
     src: containerd.service.j2
     dest: /etc/systemd/system/containerd.service
+  notify: restart containerd
+
+- name: Containerd | Drop containerd config
+  template:
+    src: config.toml.j2
+    dest: /etc/containerd/config.toml
+  notify: restart containerd
 
 - name: Containerd | Enable Containerd unit
   systemd:
