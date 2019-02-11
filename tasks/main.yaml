@@ -8,7 +8,7 @@
 - name: Containerd | Download binaries
   unarchive:
     src: "{{ containerd_release_url }}"
-    dest: "{{ containerd_release_dir}}"
+    dest: "{{ containerd_release_dir }}"
     remote_src: yes
 
 - name: Containerd | Drop systemd unit
