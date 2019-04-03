@@ -1,9 +1,11 @@
 ---
 - name: Containerd | Ensure containerd required directory exist
-  file: path={{ item }} state=directory
+  file:
+    path: "{{ item }}"
+    state: directory
   with_items:
-    - "{{ containerd_release_dir }}"
-    - "{{ containerd_config_dir }}"
+  - "{{ containerd_release_dir }}"
+  - "{{ containerd_config_dir }}"
 
 - name: Containerd | Download binaries
   unarchive:
