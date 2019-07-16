@@ -7,6 +7,13 @@
   - "{{ containerd_release_dir }}"
   - "{{ containerd_config_dir }}"
 
+- name: Containerd | Download runc
+    get_url:
+    url: "{{ runc_release url }}"
+    mode: 0755
+    dest: "{{ bin_dir }}/runc"
+    force: yes
+
 - name: Containerd | Download binaries
   unarchive:
     src: "{{ containerd_release_url }}"
