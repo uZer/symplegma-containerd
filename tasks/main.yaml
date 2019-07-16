@@ -9,7 +9,7 @@
 
 - name: Containerd | Download runc
   get_url:
-    url: "{{ runc_release url }}"
+    url: "{{ runc_release_url }}"
     mode: 0755
     dest: "{{ bin_dir }}/runc"
     force: yes
